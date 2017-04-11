@@ -1,0 +1,35 @@
+{
+  "project_info": {
+    "project_number": "772964362256",
+    "project_id": "firebase-zenithcompany"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:772964362256:android:916d026c95a79d03",
+        "android_client_info": {
+          "package_name": "com.kr.zenithcompany"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCWA18hcRBOwosYgqn-hU24TLBBE0c7gWY"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 1
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
