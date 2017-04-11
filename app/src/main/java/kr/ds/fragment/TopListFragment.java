@@ -3,6 +3,7 @@ package kr.ds.fragment;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -25,6 +26,7 @@ import kr.ds.adapter.ListAdapter;
 import kr.ds.config.Config;
 import kr.ds.data.BaseResultListener;
 import kr.ds.data.ListData;
+import kr.ds.db.BookMarkDB;
 import kr.ds.handler.ListHandler;
 
 
@@ -56,6 +58,9 @@ public class TopListFragment extends BaseFragment implements SwipeRefreshLayout.
 
     private String mParam = "";
 
+    private BookMarkDB mBookMarkDB;
+    private Cursor mCursor;
+
 
     @Override
     public void onAttach(Activity activity) {
@@ -76,7 +81,17 @@ public class TopListFragment extends BaseFragment implements SwipeRefreshLayout.
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
                 // TODO Auto-generated method stub
+
                 try{
+                    mBookMarkDB = new BookMarkDB(mContext);
+
+                    mBookMarkDB.open();
+                    mCursor = mBookMarkDB.BookMarkConfirm(mData.get(position).getUrl());
+                    if (mCursor.getCount() == 0) {
+                        mBookMarkDB.createNote(mData.get(position).getTitle(), mData.get(position).getUrl());
+                    }
+                    mCursor.close();
+                    mBookMarkDB.close();
                     Intent NextIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(mData.get(position).getUrl()));
                     startActivity(NextIntent);
                 }catch (Exception e){

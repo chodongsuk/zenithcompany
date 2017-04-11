@@ -19,7 +19,7 @@ public class BookMarkDB {
     private DatabaseHelper mDbHelper;
     private SQLiteDatabase mDb;
     private static final String DATABASE_CREATE = "create table bookmark (_id integer primary key autoincrement, " +
-    																"title text not null "+
+    																"title text not null, "+
                                                                     "url text not null "+
     																");";    
     private static final String DATABASE_NAME = "zenithcompany.db";

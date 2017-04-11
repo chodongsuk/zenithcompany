@@ -4,43 +4,38 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
-import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.maps.LocationSource;
 import com.kr.zenithcompany.R;
 import com.nhaarman.listviewanimations.appearance.simple.AlphaInAnimationAdapter;
 
 import java.util.ArrayList;
 
-
 import kr.ds.adapter.ListAdapter;
 import kr.ds.config.Config;
 import kr.ds.data.BaseResultListener;
+import kr.ds.data.BookMarkData;
 import kr.ds.data.ListData;
 import kr.ds.db.BookMarkDB;
 import kr.ds.handler.ListHandler;
 
-
 /**
- * Created by Administrator on 2016-08-31.
+ * Created by Administrator on 2016-12-26.
  */
-public class List1Fragment extends BaseFragment implements SwipeRefreshLayout.OnRefreshListener {
+public class BookMarkFragment extends BaseFragment implements SwipeRefreshLayout.OnRefreshListener{
 
     private ArrayList<ListHandler> mData;
     private ArrayList<ListHandler> mMainData;
@@ -52,7 +47,6 @@ public class List1Fragment extends BaseFragment implements SwipeRefreshLayout.On
     private View mView;
     private ProgressBar mProgressBar;
     private ListView mListView;
-    private ListData mListData;
     private ListAdapter mListAdapter;
     private int mCurrentScrollState;
     private Boolean mIsTheLoding = false;
@@ -63,10 +57,7 @@ public class List1Fragment extends BaseFragment implements SwipeRefreshLayout.On
     private final static int REFRESH = 2;
     private Context mContext;
 
-    private String mParam = "";
-
     private BookMarkDB mBookMarkDB;
-    private Cursor mCursor;
 
     @Override
     public void onAttach(Activity activity) {
@@ -78,8 +69,8 @@ public class List1Fragment extends BaseFragment implements SwipeRefreshLayout.On
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
+        mView = inflater.inflate(R.layout.fragment_bookmark, null);
 
-        mView = inflater.inflate(R.layout.fragment_list1, null);
         mListView = (ListView)mView.findViewById(R.id.listView);
         //mListView.setScrollViewCallbacks(this);
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -87,26 +78,33 @@ public class List1Fragment extends BaseFragment implements SwipeRefreshLayout.On
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
                 // TODO Auto-generated method stub
-                try{
-                    mBookMarkDB = new BookMarkDB(mContext);
-
-                    mBookMarkDB.open();
-                    mCursor = mBookMarkDB.BookMarkConfirm(mData.get(position).getUrl());
-                    if (mCursor.getCount() == 0) {
-                        mBookMarkDB.createNote(mData.get(position).getTitle(), mData.get(position).getUrl());
-                    }
-                    mCursor.close();
-                    mBookMarkDB.close();
+                try {
                     Intent NextIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(mData.get(position).getUrl()));
                     startActivity(NextIntent);
-                }catch (Exception e){
+                } catch (Exception e) {
                     Toast.makeText(mContext, "오류가 발생 되었습니다. 계속 문제가 발생시 관리자에게 문의 해주시기 바랍니다.", Toast.LENGTH_SHORT).show();
                 }
 
-
             }
         });
-
+        mListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                try {
+                    mBookMarkDB = new BookMarkDB(mContext);
+                    mBookMarkDB.open();
+                    mBookMarkDB.deleteNote(mData.get(position).getUrl());
+                    mData.remove(position);
+                    mListAdapter.notifyDataSetChanged();
+                    mBookMarkDB.close();
+                    Toast.makeText(mContext, "즐겨찾기 취소 되었습니다.", Toast.LENGTH_SHORT).show();
+                    return true;
+                } catch (Exception e) {
+                    Toast.makeText(mContext, "오류가 발생 되었습니다. 계속 문제가 발생시 관리자에게 문의 해주시기 바랍니다.", Toast.LENGTH_SHORT).show();
+                }
+                return false;
+            }
+        });
         mProgressBar = (ProgressBar)mView.findViewById(R.id.progressBar);
         mSwipeLayout = (SwipeRefreshLayout) mView.findViewById(R.id.swipe_container);
         mSwipeLayout.setOnRefreshListener(this);
@@ -118,7 +116,10 @@ public class List1Fragment extends BaseFragment implements SwipeRefreshLayout.On
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         // TODO Auto-generated method stub
         super.onActivityCreated(savedInstanceState);
-        mParam = "";
+
+
+
+
         mProgressBar.setVisibility(View.VISIBLE);
         setList();
         mListView.setOnScrollListener(new AbsListView.OnScrollListener() {
@@ -149,8 +150,7 @@ public class List1Fragment extends BaseFragment implements SwipeRefreshLayout.On
     }
 
     public void setList(){
-
-        new ListData().clear().setCallBack(new BaseResultListener() {
+        new BookMarkData(mContext).clear().setCallBack(new BaseResultListener() {
             @Override
             public <T> void OnComplete() {
 
@@ -158,8 +158,8 @@ public class List1Fragment extends BaseFragment implements SwipeRefreshLayout.On
             @Override
             public <T> void OnComplete(Object data) {
                 mProgressBar.setVisibility(View.GONE);
-                mIsTheLoding = false;
                 if(data != null){
+                    mIsTheLoding = false;
                     mPage = 1;
 
                     mMainData = (ArrayList<ListHandler>) data;
@@ -189,11 +189,12 @@ public class List1Fragment extends BaseFragment implements SwipeRefreshLayout.On
             public void OnMessage(String str) {
 
             }
-        }).setUrl(Config.URL+ Config.URL_LIST).setParam(mParam).getView();
+        }).getView();
     }
 
     public void setListRefresh(){
-        new ListData().clear().setCallBack(new BaseResultListener() {
+
+        new BookMarkData(mContext).clear().setCallBack(new BaseResultListener() {
             @Override
             public <T> void OnComplete() {
 
@@ -204,7 +205,7 @@ public class List1Fragment extends BaseFragment implements SwipeRefreshLayout.On
                 mIsTheLoding = false;
                 if(data != null){
                     mPage = 1;
-
+                    mData  = new ArrayList<>();
                     mMainData = (ArrayList<ListHandler>) data;
                     if(mMainData.size() - ((mPage-1)*mNumber) > 0){
                         if(mMainData.size() >= mPage * mNumber){
@@ -232,7 +233,7 @@ public class List1Fragment extends BaseFragment implements SwipeRefreshLayout.On
             public void OnMessage(String str) {
 
             }
-        }).setUrl(Config.URL+ Config.URL_LIST).setParam(mParam).getView();
+        }).getView();
     }
 
     public void setListOnLoad(){
@@ -267,9 +268,4 @@ public class List1Fragment extends BaseFragment implements SwipeRefreshLayout.On
         setListOnLoad();
     }
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-
-    }
 }

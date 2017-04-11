@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -16,6 +17,7 @@ import com.google.android.gms.common.GoogleApiAvailability;
 
 import kr.ds.config.Config;
 import kr.ds.fragment.BaseFragment;
+import kr.ds.fragment.BookMarkFragment;
 import kr.ds.fragment.List1Fragment;
 import kr.ds.fragment.TopListFragment;
 import kr.ds.utils.DsObjectUtils;
@@ -27,7 +29,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener{
     private FragmentTransaction mFt;
     private BaseFragment mFragment = null;
 
-
     private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
     private final int TAB1 = 1;
     private final int TAB2 = 2;
@@ -38,6 +39,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener{
 
     private LinearLayout mLinearLayoutTab1,mLinearLayoutTab2,mLinearLayoutTab3,mLinearLayoutTab4;
     private ImageView mImageViewTab1,mImageViewTab2,mImageViewTab3,mImageViewTab4;
+
+    private TextView mTextViewTopName;
 
 
     @Override
@@ -55,6 +58,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener{
         mImageViewTab3 = (ImageView) findViewById(R.id.imageView_tab3);
         mImageViewTab4 = (ImageView) findViewById(R.id.imageView_tab4);
 
+        mTextViewTopName = (TextView)findViewById(R.id.textView_top_name);
+
         if (checkPlayServices() && DsObjectUtils.getInstance(getApplicationContext()).isEmpty(SharedPreference.getSharedPreference(getApplicationContext(), Config.TOKEN))) { //토큰이 없는경우..
             Intent intent = new Intent(getApplicationContext(), RegistrationIntentService.class);
             startService(intent);
@@ -63,14 +68,24 @@ public class MainActivity extends BaseActivity implements View.OnClickListener{
     }
 
     private void setFragment(int tab) {
+
+        mImageViewTab1.setBackgroundResource(R.drawable.tab1_off);
+        mImageViewTab2.setBackgroundResource(R.drawable.tab2_off);
+        mImageViewTab3.setBackgroundResource(R.drawable.tab3_off);
+        mImageViewTab4.setBackgroundResource(R.drawable.tab4_off);
+
         if(tab == TAB1){
+            mTextViewTopName.setText("LIST");
+            mImageViewTab1.setBackgroundResource(R.drawable.tab1_on);
             mFragment = BaseFragment.newInstance(TopListFragment.class);
         }else if(tab == TAB2){
+            mTextViewTopName.setText("SPEED");
+            mImageViewTab2.setBackgroundResource(R.drawable.tab2_on);
             mFragment = BaseFragment.newInstance(List1Fragment.class);
         }else if(tab == TAB3){
-            mFragment = BaseFragment.newInstance(List1Fragment.class);
-        }else if(tab == TAB4){
-            mFragment = BaseFragment.newInstance(List1Fragment.class);
+            mTextViewTopName.setText("SAVE");
+            mImageViewTab3.setBackgroundResource(R.drawable.tab3_on);
+            mFragment = BaseFragment.newInstance(BookMarkFragment.class);
         }
 
         mFm = getSupportFragmentManager();
