@@ -69,22 +69,22 @@ public class MainActivity extends BaseActivity implements View.OnClickListener{
 
     private void setFragment(int tab) {
 
-        mImageViewTab1.setBackgroundResource(R.drawable.tab1_off);
-        mImageViewTab2.setBackgroundResource(R.drawable.tab2_off);
-        mImageViewTab3.setBackgroundResource(R.drawable.tab3_off);
-        mImageViewTab4.setBackgroundResource(R.drawable.tab4_off);
+        mImageViewTab1.setImageResource(R.drawable.tab1_off);
+        mImageViewTab2.setImageResource(R.drawable.tab2_off);
+        mImageViewTab3.setImageResource(R.drawable.tab3_off);
+        mImageViewTab4.setImageResource(R.drawable.tab4_off);
 
         if(tab == TAB1){
             mTextViewTopName.setText("LIST");
-            mImageViewTab1.setBackgroundResource(R.drawable.tab1_on);
+            mImageViewTab1.setImageResource(R.drawable.tab1_on);
             mFragment = BaseFragment.newInstance(TopListFragment.class);
         }else if(tab == TAB2){
             mTextViewTopName.setText("SPEED");
-            mImageViewTab2.setBackgroundResource(R.drawable.tab2_on);
+            mImageViewTab2.setImageResource(R.drawable.tab2_on);
             mFragment = BaseFragment.newInstance(List1Fragment.class);
         }else if(tab == TAB3){
             mTextViewTopName.setText("SAVE");
-            mImageViewTab3.setBackgroundResource(R.drawable.tab3_on);
+            mImageViewTab3.setImageResource(R.drawable.tab3_on);
             mFragment = BaseFragment.newInstance(BookMarkFragment.class);
         }
 
