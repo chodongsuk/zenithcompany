@@ -5,4 +5,5 @@
     <color name="colorPrimaryDark">#2c2021</color>
     <color name="colorAccent">#483435</color>
     <color name="app_color">#483435</color>
+    <color name="white">#ffffff</color>
 </resources>

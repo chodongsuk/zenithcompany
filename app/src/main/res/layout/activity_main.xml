@@ -13,23 +13,19 @@
         android:background="@color/app_color"
         >
 
-        <TextView
-            android:id="@+id/textView_top_name"
+        <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:text="메뉴"
-            android:textColor="#ffffff"
-            android:textSize="16sp"
-            android:textStyle="bold"/>
+            android:src="@mipmap/top"/>
 
         <ImageView
             android:id="@+id/imageView_setting"
-            android:padding="5dip"
+            android:padding="12dip"
             android:layout_alignParentRight="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@mipmap/ic_launcher"/>
+            android:src="@drawable/setting"/>
 
     </RelativeLayout>
 

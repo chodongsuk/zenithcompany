@@ -35,6 +35,7 @@ import kr.ds.data.BaseResultListener;
 import kr.ds.data.ListData;
 import kr.ds.db.BookMarkDB;
 import kr.ds.handler.ListHandler;
+import kr.ds.utils.SharedPreference;
 
 
 /**
@@ -114,11 +115,23 @@ public class List1Fragment extends BaseFragment implements SwipeRefreshLayout.On
         return mView;
     }
 
+    private String setCodeParam(){
+        String param = "";
+        if(SharedPreference.getBooleanSharedPreference(mContext, Config.ALL_CODE)){
+            param += "?all_code=ok";
+        }else{
+            param += "?all_code=";
+        }
+        param += "&codes="+SharedPreference.getSharedPreference(mContext, Config.CODES);
+
+        return param;
+    }
+
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         // TODO Auto-generated method stub
         super.onActivityCreated(savedInstanceState);
-        mParam = "";
+        mParam = setCodeParam();
         mProgressBar.setVisibility(View.VISIBLE);
         setList();
         mListView.setOnScrollListener(new AbsListView.OnScrollListener() {
@@ -193,6 +206,7 @@ public class List1Fragment extends BaseFragment implements SwipeRefreshLayout.On
     }
 
     public void setListRefresh(){
+        mParam = setCodeParam();
         new ListData().clear().setCallBack(new BaseResultListener() {
             @Override
             public <T> void OnComplete() {

@@ -15,4 +15,7 @@ public class Config {
 	public static final String REGISTRATION_COMPLETE = "registrationComplete";
 	public static final String TOKEN = "token";
 	//gcmend
+	public static final String CODE_DATE = "2017041202";
+	public static final String CODES = "codes";
+	public static final String ALL_CODE = "all_code";
 }

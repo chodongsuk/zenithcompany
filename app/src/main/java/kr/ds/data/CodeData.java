@@ -1,5 +1,6 @@
 package kr.ds.data;
 
+import android.content.Context;
 import android.util.Log;
 
 import org.json.JSONArray;
@@ -10,9 +11,11 @@ import java.util.concurrent.Callable;
 
 import kr.ds.asynctask.DsAsyncTask;
 import kr.ds.asynctask.DsAsyncTaskCallback;
+import kr.ds.config.Config;
 import kr.ds.handler.CodeHandler;
 import kr.ds.httpclient.DsHttpClient;
 import kr.ds.utils.DsObjectUtils;
+import kr.ds.utils.SharedPreference;
 
 /**
  * Created by Administrator on 2016-08-31.
@@ -25,8 +28,15 @@ public class CodeData extends BaseData {
     private CodeHandler mCodeHandler;
     private ArrayList<CodeHandler> mData;
     private BaseResultListener mResultListener;
+    public static int LIST = 1;
+    public static int NEW = 0;
+    private int mType = NEW;
+    private Context mContext;
+    private String mCodes = "";
 
-    public CodeData(){
+    public CodeData(Context context, int type){
+        mContext = context;
+        mType = type;
     }
 
     @Override
@@ -70,6 +80,10 @@ public class CodeData extends BaseData {
                 summery[1] = summeryjsonObject.getString("msg");
                 if (result.matches("success")) {
                     JSONArray jsonArray = jsonObject.getJSONArray("list");
+
+                    if(mType == LIST){
+                        mCodes = SharedPreference.getSharedPreference(mContext, Config.CODES);
+                    }
                     for (int i = 0; i < jsonArray.length(); i++) {
                         JSONObject jsonObject1 = jsonArray.getJSONObject(i);
                         mData.add(new CodeHandler());
@@ -77,12 +91,16 @@ public class CodeData extends BaseData {
                             mCodeHandler = mData.get(mData.size() - 1);
                             mCodeHandler.setCode(jsonObject1.getString("code"));
                             mCodeHandler.setName(jsonObject1.getString("name"));
+                            if(mType == LIST) {
+                                if(mCodes.contains(jsonObject1.getString("code"))) {
+                                    mCodeHandler.setCheck(true);
+                                }else{
+                                    mCodeHandler.setCheck(false);
+                                }
+                            }
                         }
                     }
                 }
-
-
-
                 return summery;
 
             }

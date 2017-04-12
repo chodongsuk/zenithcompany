@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">다모 체험단</string>
+    <string name="push">알림 설정</string>
+    <string name="version">Build Version </string>
 </resources>

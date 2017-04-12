@@ -6,6 +6,7 @@ package kr.ds.handler;
 public class CodeHandler {
     private String code;
     private String name;
+    private boolean isCheck;
 
 
     public String getCode() {
@@ -22,5 +23,13 @@ public class CodeHandler {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public boolean isCheck() {
+        return isCheck;
+    }
+
+    public void setCheck(boolean check) {
+        isCheck = check;
     }
 }

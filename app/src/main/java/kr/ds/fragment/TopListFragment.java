@@ -28,6 +28,7 @@ import kr.ds.data.BaseResultListener;
 import kr.ds.data.ListData;
 import kr.ds.db.BookMarkDB;
 import kr.ds.handler.ListHandler;
+import kr.ds.utils.SharedPreference;
 
 
 /**
@@ -108,12 +109,24 @@ public class TopListFragment extends BaseFragment implements SwipeRefreshLayout.
         mSwipeLayout.setColorSchemeResources(R.color.colorPrimary);
         return mView;
     }
+    private String setCodeParam(){
+        String param = "";
+        if(SharedPreference.getBooleanSharedPreference(mContext, Config.ALL_CODE)){
+            param += "?all_code=ok";
+        }else{
+            param += "?all_code=";
+        }
+        param += "&codes="+SharedPreference.getSharedPreference(mContext, Config.CODES);
+
+        return param;
+    }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         // TODO Auto-generated method stub
         super.onActivityCreated(savedInstanceState);
-        mParam = "?zbcd_uid=1";
+
+        mParam = setCodeParam()+"&admin_blog=ok";
         mProgressBar.setVisibility(View.VISIBLE);
         setList();
         mListView.setOnScrollListener(new AbsListView.OnScrollListener() {
@@ -188,6 +201,7 @@ public class TopListFragment extends BaseFragment implements SwipeRefreshLayout.
     }
 
     public void setListRefresh(){
+        mParam = setCodeParam()+"&admin_blog=true";
         new ListData().clear().setCallBack(new BaseResultListener() {
             @Override
             public <T> void OnComplete() {

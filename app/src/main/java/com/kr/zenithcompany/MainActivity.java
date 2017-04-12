@@ -40,7 +40,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener{
     private LinearLayout mLinearLayoutTab1,mLinearLayoutTab2,mLinearLayoutTab3,mLinearLayoutTab4;
     private ImageView mImageViewTab1,mImageViewTab2,mImageViewTab3,mImageViewTab4;
 
-    private TextView mTextViewTopName;
+    private ImageView mImageViewSetting;
 
 
     @Override
@@ -52,13 +52,13 @@ public class MainActivity extends BaseActivity implements View.OnClickListener{
         (mLinearLayoutTab2 = (LinearLayout)findViewById(R.id.linearLayout_tab2)).setOnClickListener(this);
         (mLinearLayoutTab3 = (LinearLayout)findViewById(R.id.linearLayout_tab3)).setOnClickListener(this);
         (mLinearLayoutTab4 = (LinearLayout)findViewById(R.id.linearLayout_tab4)).setOnClickListener(this);
+        (mImageViewSetting = (ImageView) findViewById(R.id.imageView_setting)).setOnClickListener(this);
 
         mImageViewTab1 = (ImageView) findViewById(R.id.imageView_tab1);
         mImageViewTab2 = (ImageView) findViewById(R.id.imageView_tab2);
         mImageViewTab3 = (ImageView) findViewById(R.id.imageView_tab3);
         mImageViewTab4 = (ImageView) findViewById(R.id.imageView_tab4);
 
-        mTextViewTopName = (TextView)findViewById(R.id.textView_top_name);
 
         if (checkPlayServices() && DsObjectUtils.getInstance(getApplicationContext()).isEmpty(SharedPreference.getSharedPreference(getApplicationContext(), Config.TOKEN))) { //토큰이 없는경우..
             Intent intent = new Intent(getApplicationContext(), RegistrationIntentService.class);
@@ -75,15 +75,12 @@ public class MainActivity extends BaseActivity implements View.OnClickListener{
         mImageViewTab4.setImageResource(R.drawable.tab4_off);
 
         if(tab == TAB1){
-            mTextViewTopName.setText("LIST");
             mImageViewTab1.setImageResource(R.drawable.tab1_on);
             mFragment = BaseFragment.newInstance(TopListFragment.class);
         }else if(tab == TAB2){
-            mTextViewTopName.setText("SPEED");
             mImageViewTab2.setImageResource(R.drawable.tab2_on);
             mFragment = BaseFragment.newInstance(List1Fragment.class);
         }else if(tab == TAB3){
-            mTextViewTopName.setText("SAVE");
             mImageViewTab3.setImageResource(R.drawable.tab3_on);
             mFragment = BaseFragment.newInstance(BookMarkFragment.class);
         }
@@ -123,6 +120,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener{
                 break;
             case R.id.linearLayout_tab4:
                 Toast.makeText(getApplicationContext(), "새로운 기능이 여름에 오픈됩니다.", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.imageView_setting:
+                Intent intent = new Intent(this, SettingActivity.class);
+                startActivity(intent);
                 break;
 
         }
