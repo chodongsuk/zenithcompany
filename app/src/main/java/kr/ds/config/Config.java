@@ -8,6 +8,7 @@ public class Config {
 	public static String URL = "http://zenithcompany1.cafe24.com/json/";
 	public static String URL_LIST = "list.php";
 	public static String URL_CODE = "code.php";
+	public static String URL_WEB = "web.php";
 
 	//gcm
 	public static final String ANDROID_ID = "android_id";

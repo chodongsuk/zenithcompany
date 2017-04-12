@@ -20,6 +20,7 @@ import kr.ds.fragment.BaseFragment;
 import kr.ds.fragment.BookMarkFragment;
 import kr.ds.fragment.List1Fragment;
 import kr.ds.fragment.TopListFragment;
+import kr.ds.fragment.WebFragment;
 import kr.ds.utils.DsObjectUtils;
 import kr.ds.utils.SharedPreference;
 
@@ -83,6 +84,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener{
         }else if(tab == TAB3){
             mImageViewTab3.setImageResource(R.drawable.tab3_on);
             mFragment = BaseFragment.newInstance(BookMarkFragment.class);
+        }else if(tab == TAB4){
+            mImageViewTab4.setImageResource(R.drawable.tab4_on);
+            mFragment = BaseFragment.newInstance(WebFragment.class);
         }
 
         mFm = getSupportFragmentManager();
@@ -119,7 +123,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener{
                 setFragment(TAB3);
                 break;
             case R.id.linearLayout_tab4:
-                Toast.makeText(getApplicationContext(), "새로운 기능이 여름에 오픈됩니다.", Toast.LENGTH_SHORT).show();
+                setFragment(TAB4);
                 break;
             case R.id.imageView_setting:
                 Intent intent = new Intent(this, SettingActivity.class);
