@@ -10,10 +10,12 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.EditText;
@@ -91,6 +93,29 @@ public class List1Fragment extends BaseFragment implements SwipeRefreshLayout.On
         mView = inflater.inflate(R.layout.fragment_list1, null);
 
         mEditTextMessage = (EditText)mView.findViewById(R.id.editText_message);
+
+        mEditTextMessage.setImeOptions(EditorInfo.IME_ACTION_NEXT);
+        mEditTextMessage.setOnEditorActionListener(new TextView.OnEditorActionListener()
+        {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event)
+            {
+                if(actionId == EditorInfo.IME_ACTION_NEXT)
+                {
+                    try {
+                        mParam = setCodeParam()+"&search="+ URLEncoder.encode(mEditTextMessage.getText().toString(),"utf-8");
+                        mProgressBar.setVisibility(View.VISIBLE);
+                        setList();
+                        DsKeyBoardUtils.getInstance().hideKeyboard(getActivity());
+                    } catch (UnsupportedEncodingException e) {
+                        e.printStackTrace();
+                    }
+                    return true;
+                }
+                return false;
+            }
+        });
+
         (mImageViewBtn = (ImageView) mView.findViewById(R.id.imageView_btn)).setOnClickListener(this);
 
         mListView = (ListView)mView.findViewById(R.id.listView);
