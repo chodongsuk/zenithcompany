@@ -13,6 +13,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
+import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
@@ -20,6 +22,8 @@ import android.widget.Toast;
 import com.kr.zenithcompany.R;
 import com.nhaarman.listviewanimations.appearance.simple.AlphaInAnimationAdapter;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 
 import kr.ds.adapter.ListAdapter;
@@ -28,17 +32,18 @@ import kr.ds.data.BaseResultListener;
 import kr.ds.data.ListData;
 import kr.ds.db.BookMarkDB;
 import kr.ds.handler.ListHandler;
+import kr.ds.utils.DsKeyBoardUtils;
 import kr.ds.utils.SharedPreference;
 
 
 /**
  * Created by Administrator on 2016-08-31.
  */
-public class TopListFragment extends BaseFragment implements SwipeRefreshLayout.OnRefreshListener {
+public class TopListFragment extends BaseFragment implements SwipeRefreshLayout.OnRefreshListener, View.OnClickListener {
 
     private ArrayList<ListHandler> mData;
     private ArrayList<ListHandler> mMainData;
-    private int mNumber = 10;
+    private int mNumber = 20;
     private int mPage = 1;
     private int startPage = 0;
     private int endPage = 0;
@@ -62,6 +67,9 @@ public class TopListFragment extends BaseFragment implements SwipeRefreshLayout.
     private BookMarkDB mBookMarkDB;
     private Cursor mCursor;
 
+    private EditText mEditTextMessage;
+    private ImageView mImageViewBtn;
+
 
     @Override
     public void onAttach(Activity activity) {
@@ -75,6 +83,11 @@ public class TopListFragment extends BaseFragment implements SwipeRefreshLayout.
 
 
         mView = inflater.inflate(R.layout.fragment_list1, null);
+
+        mEditTextMessage = (EditText)mView.findViewById(R.id.editText_message);
+        (mImageViewBtn = (ImageView) mView.findViewById(R.id.imageView_btn)).setOnClickListener(this);
+
+
         mListView = (ListView)mView.findViewById(R.id.listView);
         //mListView.setScrollViewCallbacks(this);
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -189,6 +202,7 @@ public class TopListFragment extends BaseFragment implements SwipeRefreshLayout.
                         mListView.setAdapter(mAlphaInAnimationAdapter);
                     }
                 }else{
+                    Toast.makeText(mContext, "데이터가 존재하지 않습니다.", Toast.LENGTH_SHORT).show();
                     mListView.setAdapter(null);
                 }
             }
@@ -201,7 +215,12 @@ public class TopListFragment extends BaseFragment implements SwipeRefreshLayout.
     }
 
     public void setListRefresh(){
-        mParam = setCodeParam()+"&admin_blog=true";
+
+        try {
+            mParam = setCodeParam()+"&admin_blog=true&search="+ URLEncoder.encode(mEditTextMessage.getText().toString(),"utf-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
         new ListData().clear().setCallBack(new BaseResultListener() {
             @Override
             public <T> void OnComplete() {
@@ -233,6 +252,7 @@ public class TopListFragment extends BaseFragment implements SwipeRefreshLayout.
                         mListView.setAdapter(mAlphaInAnimationAdapter);
                     }
                 }else{
+                    Toast.makeText(mContext, "데이터가 존재하지 않습니다.", Toast.LENGTH_SHORT).show();
                     mListView.setAdapter(null);
                 }
             }
@@ -280,5 +300,20 @@ public class TopListFragment extends BaseFragment implements SwipeRefreshLayout.
     public void onDestroyView() {
         super.onDestroyView();
 
+    }
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.imageView_btn:
+                try {
+                    mParam = setCodeParam()+"&admin_blog=true&search="+ URLEncoder.encode(mEditTextMessage.getText().toString(),"utf-8");
+                    mProgressBar.setVisibility(View.VISIBLE);
+                    setList();
+                    DsKeyBoardUtils.getInstance().hideKeyboard(getActivity());
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                }
+                break;
+        }
     }
 }

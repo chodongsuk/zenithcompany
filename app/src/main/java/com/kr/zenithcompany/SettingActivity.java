@@ -1,5 +1,7 @@
 package com.kr.zenithcompany;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -12,6 +14,7 @@ import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.nhaarman.listviewanimations.appearance.simple.AlphaInAnimationAdapter;
 
@@ -43,6 +46,7 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
     private ArrayList<VersionCheckHandler> DATA = new ArrayList<VersionCheckHandler>();
     private LinearLayout mLinearLayoutPush;
     private LinearLayout mLinearLayoutArea;
+    private LinearLayout mLinearLayoutReView;
     private String regId;
     private String androidId;
     private String url = "http://zenithcompany1.cafe24.com/json/gcm/gcm_send_check.php";
@@ -62,6 +66,7 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
         }
         mListView = (ListView)findViewById(R.id.listView);
         mLinearLayoutPush = (LinearLayout)findViewById(R.id.linearLayout_push);
+        (mLinearLayoutReView = (LinearLayout)findViewById(R.id.linearLayout_review)).setOnClickListener(this);
         (mCheckBoxPush = (CheckBox)findViewById(R.id.checkBox_push)).setOnClickListener(this);
         mTextViewVersion = (TextView)findViewById(R.id.textView_version);
         (mCheckBoxAll = (CheckBox)findViewById(R.id.checkBox)).setOnClickListener(this);
@@ -155,6 +160,14 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
                 }else{
                     new regSendCheckTask().execute(androidId, regId, "N",updateurl);
                     setBackgroundChecked(mCheckBoxPush, false);
+                }
+                break;
+            case R.id.linearLayout_review:
+                try {
+                    startActivity(new Intent(Intent.ACTION_VIEW).setData(Uri.parse("market://details?id=com.kr.zenithcompany")));
+                } catch (Exception e) {
+                    // TODO: handle exception
+                    Toast.makeText(getApplicationContext(), "플레이 스토어 설치 후 이용 가능합니다.",Toast.LENGTH_SHORT).show();
                 }
                 break;
         }

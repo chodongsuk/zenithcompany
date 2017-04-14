@@ -39,7 +39,7 @@ public class BookMarkFragment extends BaseFragment implements SwipeRefreshLayout
 
     private ArrayList<ListHandler> mData;
     private ArrayList<ListHandler> mMainData;
-    private int mNumber = 10;
+    private int mNumber = 20;
     private int mPage = 1;
     private int startPage = 0;
     private int endPage = 0;

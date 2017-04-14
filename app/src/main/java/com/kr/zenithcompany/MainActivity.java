@@ -77,10 +77,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener{
 
         if(tab == TAB1){
             mImageViewTab1.setImageResource(R.drawable.tab1_on);
-            mFragment = BaseFragment.newInstance(TopListFragment.class);
+            mFragment = BaseFragment.newInstance(List1Fragment.class);
         }else if(tab == TAB2){
             mImageViewTab2.setImageResource(R.drawable.tab2_on);
-            mFragment = BaseFragment.newInstance(List1Fragment.class);
+            mFragment = BaseFragment.newInstance(TopListFragment.class);
         }else if(tab == TAB3){
             mImageViewTab3.setImageResource(R.drawable.tab3_on);
             mFragment = BaseFragment.newInstance(BookMarkFragment.class);
