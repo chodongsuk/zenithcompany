@@ -90,6 +90,12 @@ public class BookMarkData extends BaseData {
 
                         mListHandler.setTitle(mCursor.getString(1));
                         mListHandler.setUrl(mCursor.getString(2));
+                        if(!DsObjectUtils.isEmpty(mCursor.getString(3))) {
+                            mListHandler.setImage(mCursor.getString(3));
+                        }else{
+                            mListHandler.setImage("http://zenithcompany1.cafe24.com/json/image/noimage.jpg");
+                        }
+
                     }
                     mCursor.moveToNext();
                 }

@@ -21,7 +21,8 @@ public class BookMarkDB {
     private SQLiteDatabase mDb;
     private static final String DATABASE_CREATE = "create table bookmark (_id integer primary key autoincrement, " +
     																"title text not null, "+
-                                                                    "url text not null "+
+                                                                    "url text not null, "+
+                                                                    "image text null "+
     																");";    
     private static final String DATABASE_NAME = "zenithcompany.db";
     private static final String DATABASE_TABLE = "bookmark";
@@ -29,6 +30,8 @@ public class BookMarkDB {
     private final Context mCtx;
     
     private static class DatabaseHelper extends SQLiteOpenHelper {
+
+
         DatabaseHelper(Context context) { 
             super(context, DATABASE_NAME, null, DATABASE_VERSION);
         }
@@ -45,9 +48,8 @@ public class BookMarkDB {
             switch (oldVersion) {
                 case 1 :
                     try {
-                        Log.i("TEST","111");
                         db.beginTransaction();
-                        db.execSQL("alter table bookmark add column image text not null");
+                        db.execSQL("alter table bookmark add column image text null");
                         db.setTransactionSuccessful();
                     } catch (IllegalStateException e) {
 
