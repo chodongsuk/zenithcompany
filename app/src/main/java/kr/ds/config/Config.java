@@ -6,7 +6,7 @@ public class Config {
 	public Context mContext;
 	
 	public static String URL = "http://zenithcompany1.cafe24.com/json/";
-	public static String URL_LIST = "list_v1.php";
+	public static String URL_LIST = "list_v2.php";
 	public static String URL_CODE = "code.php";
 	public static String URL_WEB = "web.php";
 

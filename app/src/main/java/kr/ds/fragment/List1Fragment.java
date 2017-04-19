@@ -131,7 +131,7 @@ public class List1Fragment extends BaseFragment implements SwipeRefreshLayout.On
                     mBookMarkDB.open();
                     mCursor = mBookMarkDB.BookMarkConfirm(mData.get(position).getUrl());
                     if (mCursor.getCount() == 0) {
-                        mBookMarkDB.createNote(mData.get(position).getTitle(), mData.get(position).getUrl());
+                        mBookMarkDB.createNote(mData.get(position).getTitle(), mData.get(position).getUrl(),mData.get(position).getImage());
                     }
                     mCursor.close();
                     mBookMarkDB.close();

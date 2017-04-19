@@ -5,9 +5,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.kr.zenithcompany.R;
 
 import java.util.ArrayList;
@@ -56,6 +59,7 @@ public class ListAdapter extends BaseAdapter {
             holder = new ViewHolder();
             convertView = mInflater.inflate(R.layout.fragment_list1_item1,null);
             holder.textViewTitle = (TextView) convertView.findViewById(R.id.textView_title);
+            holder.imageView = (ImageView) convertView.findViewById(R.id.imageView);
 
             convertView.setTag(holder);
         } else {
@@ -69,11 +73,22 @@ public class ListAdapter extends BaseAdapter {
             holder.textViewTitle.setVisibility(View.GONE);
             holder.textViewTitle.setText("");
         }
+
+        if(!DsObjectUtils.isEmpty(mData.get(position).getImage())){
+            Glide.with(mContext)
+                    .load(mData.get(position).getImage())
+                    .override(200,200)
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .into(holder.imageView);
+        }else{
+            holder.imageView.setVisibility(View.GONE);
+        }
         return convertView;
     }
 
 
     class ViewHolder {
+        ImageView imageView;
         TextView textViewTitle;
     }
 

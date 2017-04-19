@@ -12,6 +12,7 @@ public class ListHandler  implements Parcelable{
 
     public String title;
     public String url;
+    public String image;
 
     public String getTitle() {
         return title;
@@ -29,6 +30,14 @@ public class ListHandler  implements Parcelable{
         this.url = url;
     }
 
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
     public ListHandler(){
 
     }
@@ -36,6 +45,7 @@ public class ListHandler  implements Parcelable{
     public ListHandler (Parcel src){
         this.title = src.readString();
         this.url = src.readString();
+        this.image = src.readString();
 
 
     }
@@ -49,6 +59,7 @@ public class ListHandler  implements Parcelable{
         // TODO Auto-generated method stub
         dest.writeString(this.title);
         dest.writeString(this.url);
+        dest.writeString(this.image);
 
 
 

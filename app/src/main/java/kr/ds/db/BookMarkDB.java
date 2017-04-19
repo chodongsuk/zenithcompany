@@ -14,6 +14,7 @@ public class BookMarkDB {
 	public static final String ID = "_id";
 	public static final String TITLE = "title";
     public static final String URL = "url";
+    public static final String IMAGE = "image";
 
 	
     private DatabaseHelper mDbHelper;
@@ -24,7 +25,7 @@ public class BookMarkDB {
     																");";    
     private static final String DATABASE_NAME = "zenithcompany.db";
     private static final String DATABASE_TABLE = "bookmark";
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
     private final Context mCtx;
     
     private static class DatabaseHelper extends SQLiteOpenHelper {
@@ -40,8 +41,21 @@ public class BookMarkDB {
         @Override 
         public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
             Log.w(TAG, "Upgrading database from version " + oldVersion + " to " + newVersion + ", which will destroy all old data");
-            db.execSQL("DROP TABLE IF EXISTS conf_data"); 
-            onCreate(db); 
+
+            switch (oldVersion) {
+                case 1 :
+                    try {
+                        Log.i("TEST","111");
+                        db.beginTransaction();
+                        db.execSQL("alter table bookmark add column image text not null");
+                        db.setTransactionSuccessful();
+                    } catch (IllegalStateException e) {
+
+                    } finally {
+                        db.endTransaction();
+                    };
+                    break;
+            }
         }
     }
     
@@ -60,10 +74,11 @@ public class BookMarkDB {
     }
     
     // 북마크데이터 Insert Type1
-    public long createNote(String title, String url) {
+    public long createNote(String title, String url, String image) {
         ContentValues initialValues = new ContentValues();
         initialValues.put(TITLE, title);
         initialValues.put(URL, url);
+        initialValues.put(IMAGE, image);
 
         return mDb.insert(DATABASE_TABLE, null, initialValues);
     }
@@ -76,7 +91,7 @@ public class BookMarkDB {
     
     // 북마크데이터 모든데이터 Select
     public Cursor fetchAllForType() throws SQLException {
-        Cursor mCursor = mDb.query(DATABASE_TABLE, new String[] { ID, TITLE, URL}, null, null, null, null, ID +" DESC");
+        Cursor mCursor = mDb.query(DATABASE_TABLE, new String[] { ID, TITLE, URL, IMAGE}, null, null, null, null, ID +" DESC");
         return mCursor; 
     }
     

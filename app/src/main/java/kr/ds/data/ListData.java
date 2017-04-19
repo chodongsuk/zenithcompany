@@ -78,6 +78,7 @@ public class ListData extends BaseData {
 
                             mListHandler.setTitle(jsonObject1.getString("title"));
                             mListHandler.setUrl(jsonObject1.getString("url"));
+                            mListHandler.setImage(jsonObject1.getString("image"));
 
                         }
                     }
