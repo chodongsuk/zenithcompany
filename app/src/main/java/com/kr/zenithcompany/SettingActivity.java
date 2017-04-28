@@ -166,6 +166,7 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
                 break;
             case R.id.linearLayout_review:
                 try {
+
                     startActivity(new Intent(Intent.ACTION_VIEW).setData(Uri.parse("market://details?id=com.kr.zenithcompany")));
                 } catch (Exception e) {
                     // TODO: handle exception
