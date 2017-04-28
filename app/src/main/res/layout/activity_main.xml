@@ -57,6 +57,8 @@
                     android:src="@drawable/btn1"/>
             </LinearLayout>
 
+
+
             <View
                 android:layout_marginTop="5dip"
                 android:layout_marginBottom="5dip"
@@ -119,6 +121,31 @@
                     android:layout_height="wrap_content"
                     android:src="@drawable/btn4"/>
             </LinearLayout>
+
+            <View
+                android:layout_marginTop="5dip"
+                android:layout_marginBottom="5dip"
+                android:layout_width="0.5dp"
+                android:layout_height="match_parent"
+                android:background="#cbcfd2"/>
+
+            <LinearLayout
+                android:id="@+id/linearLayout_tab5"
+                android:gravity="center"
+                android:layout_width="0dip"
+                android:layout_weight="1"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/imageView_tab5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/btn5"/>
+            </LinearLayout>
+
+
+
+
         </LinearLayout>
 
         <View

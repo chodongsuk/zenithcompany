@@ -9,7 +9,9 @@ public class Config {
 	public static String URL_LIST = "list_v2.php";
 	public static String URL_CODE = "code.php";
 	public static String URL_WEB = "web.php";
-
+	public static String TAB5 = "tab5.php";
+	public static String TAB6 = "tab6.php";
+	public static String URL_POPUP = "popup.php";
 	//gcm
 	public static final String ANDROID_ID = "android_id";
 	public static final String SENT_TOKEN_TO_SERVER = "sentTokenToServer";

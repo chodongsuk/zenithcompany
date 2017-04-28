@@ -14,13 +14,25 @@ import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
+import com.nhaarman.listviewanimations.appearance.simple.AlphaInAnimationAdapter;
 
+import java.util.ArrayList;
+
+import kr.ds.adapter.ListAdapter;
 import kr.ds.config.Config;
+import kr.ds.data.BaseResultListener;
+import kr.ds.data.ListData;
+import kr.ds.data.PopupData;
 import kr.ds.fragment.BaseFragment;
 import kr.ds.fragment.BookMarkFragment;
 import kr.ds.fragment.List1Fragment;
+import kr.ds.fragment.Tab5Fragment;
+import kr.ds.fragment.Tab6Fragment;
 import kr.ds.fragment.TopListFragment;
 import kr.ds.fragment.WebFragment;
+import kr.ds.handler.ListHandler;
+import kr.ds.handler.PopupHandler;
+import kr.ds.popup.PopupDialog;
 import kr.ds.utils.DsObjectUtils;
 import kr.ds.utils.SharedPreference;
 
@@ -35,11 +47,13 @@ public class MainActivity extends BaseActivity implements View.OnClickListener{
     private final int TAB2 = 2;
     private final int TAB3 = 3;
     private final int TAB4 = 4;
+    private final int TAB5 = 5;
+
 
     private Bundle mBundle;
 
-    private LinearLayout mLinearLayoutTab1,mLinearLayoutTab2,mLinearLayoutTab3,mLinearLayoutTab4;
-    private ImageView mImageViewTab1,mImageViewTab2,mImageViewTab3,mImageViewTab4;
+    private LinearLayout mLinearLayoutTab1,mLinearLayoutTab2,mLinearLayoutTab3,mLinearLayoutTab4,mLinearLayoutTab5;
+    private ImageView mImageViewTab1,mImageViewTab2,mImageViewTab3,mImageViewTab4, mImageViewTab5;
 
     private ImageView mImageViewSetting;
 
@@ -53,12 +67,14 @@ public class MainActivity extends BaseActivity implements View.OnClickListener{
         (mLinearLayoutTab2 = (LinearLayout)findViewById(R.id.linearLayout_tab2)).setOnClickListener(this);
         (mLinearLayoutTab3 = (LinearLayout)findViewById(R.id.linearLayout_tab3)).setOnClickListener(this);
         (mLinearLayoutTab4 = (LinearLayout)findViewById(R.id.linearLayout_tab4)).setOnClickListener(this);
+        (mLinearLayoutTab5 = (LinearLayout)findViewById(R.id.linearLayout_tab5)).setOnClickListener(this);
         (mImageViewSetting = (ImageView) findViewById(R.id.imageView_setting)).setOnClickListener(this);
 
         mImageViewTab1 = (ImageView) findViewById(R.id.imageView_tab1);
         mImageViewTab2 = (ImageView) findViewById(R.id.imageView_tab2);
         mImageViewTab3 = (ImageView) findViewById(R.id.imageView_tab3);
         mImageViewTab4 = (ImageView) findViewById(R.id.imageView_tab4);
+        mImageViewTab5 = (ImageView) findViewById(R.id.imageView_tab5);
 
 
         if (checkPlayServices() && DsObjectUtils.getInstance(getApplicationContext()).isEmpty(SharedPreference.getSharedPreference(getApplicationContext(), Config.TOKEN))) { //토큰이 없는경우..
@@ -66,6 +82,34 @@ public class MainActivity extends BaseActivity implements View.OnClickListener{
             startService(intent);
         }
         setFragment(TAB1);
+        setPopup();
+
+    }
+    private void setPopup(){
+        new PopupData().clear().setCallBack(new BaseResultListener() {
+            @Override
+            public <T> void OnComplete() {
+
+            }
+            @Override
+            public <T> void OnComplete(Object data) {
+                if(data != null) {
+                    PopupHandler popupHandler = (PopupHandler) data;
+                    if(!DsObjectUtils.isEmpty(popupHandler.getHidden())){
+                        if(popupHandler.getHidden().matches("N")){
+                            final PopupDialog mDialog = new PopupDialog(popupHandler);// call the static method
+                            mDialog.show(getSupportFragmentManager(), "dialog");
+                        }
+                    }
+
+                }
+            }
+
+            @Override
+            public void OnMessage(String str) {
+
+            }
+        }).setUrl(Config.URL+ Config.URL_POPUP).setParam("").getView();
     }
 
     private void setFragment(int tab) {
@@ -74,6 +118,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener{
         mImageViewTab2.setImageResource(R.drawable.tab2_off);
         mImageViewTab3.setImageResource(R.drawable.tab3_off);
         mImageViewTab4.setImageResource(R.drawable.tab4_off);
+        mImageViewTab5.setImageResource(R.drawable.tab5_off);
 
         if(tab == TAB1){
             mImageViewTab1.setImageResource(R.drawable.tab1_on);
@@ -83,10 +128,13 @@ public class MainActivity extends BaseActivity implements View.OnClickListener{
             mFragment = BaseFragment.newInstance(TopListFragment.class);
         }else if(tab == TAB3){
             mImageViewTab3.setImageResource(R.drawable.tab3_on);
-            mFragment = BaseFragment.newInstance(BookMarkFragment.class);
+            mFragment = BaseFragment.newInstance(Tab5Fragment.class);
         }else if(tab == TAB4){
             mImageViewTab4.setImageResource(R.drawable.tab4_on);
-            mFragment = BaseFragment.newInstance(WebFragment.class);
+            mFragment = BaseFragment.newInstance(Tab6Fragment.class);
+        }else if(tab == TAB5){
+            mImageViewTab5.setImageResource(R.drawable.tab5_on);
+            mFragment = BaseFragment.newInstance(BookMarkFragment.class);
         }
 
         mFm = getSupportFragmentManager();
@@ -124,6 +172,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener{
                 break;
             case R.id.linearLayout_tab4:
                 setFragment(TAB4);
+                break;
+            case R.id.linearLayout_tab5:
+                setFragment(TAB5);
                 break;
             case R.id.imageView_setting:
                 Intent intent = new Intent(this, SettingActivity.class);

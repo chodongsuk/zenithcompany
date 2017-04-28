@@ -3,4 +3,6 @@
     <string name="push">알림 설정</string>
     <string name="review">리뷰 남기기</string>
     <string name="version">Build Version </string>
+    <string name="notice">공지사항</string>
+
 </resources>

@@ -47,6 +47,7 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
     private LinearLayout mLinearLayoutPush;
     private LinearLayout mLinearLayoutArea;
     private LinearLayout mLinearLayoutReView;
+    private LinearLayout mLinearLayoutNotice;
     private String regId;
     private String androidId;
     private String url = "http://zenithcompany1.cafe24.com/json/gcm/gcm_send_check.php";
@@ -67,8 +68,9 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
         mListView = (ListView)findViewById(R.id.listView);
         mLinearLayoutPush = (LinearLayout)findViewById(R.id.linearLayout_push);
         (mLinearLayoutReView = (LinearLayout)findViewById(R.id.linearLayout_review)).setOnClickListener(this);
+        (mLinearLayoutNotice = (LinearLayout)findViewById(R.id.linearLayout_notice)).setOnClickListener(this);
         (mCheckBoxPush = (CheckBox)findViewById(R.id.checkBox_push)).setOnClickListener(this);
-        mTextViewVersion = (TextView)findViewById(R.id.textView_version);
+       mTextViewVersion = (TextView)findViewById(R.id.textView_version);
         (mCheckBoxAll = (CheckBox)findViewById(R.id.checkBox)).setOnClickListener(this);
 
         mTextViewVersion.setText(new VersionUtils().VersionName(getApplicationContext()));
@@ -170,6 +172,11 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
                     Toast.makeText(getApplicationContext(), "플레이 스토어 설치 후 이용 가능합니다.",Toast.LENGTH_SHORT).show();
                 }
                 break;
+            case R.id.linearLayout_notice:
+                Intent intent = new Intent(this, NoticeActivity.class);
+                startActivity(intent);
+                break;
+
         }
     }
 
