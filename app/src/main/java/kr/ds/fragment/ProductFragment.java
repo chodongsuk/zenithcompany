@@ -19,6 +19,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -30,19 +31,21 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 
 import kr.ds.adapter.ListAdapter;
+import kr.ds.adapter.CodeProductAdapter;
 import kr.ds.config.Config;
 import kr.ds.data.BaseResultListener;
+import kr.ds.data.CodeProductData;
 import kr.ds.data.ListData;
 import kr.ds.db.BookMarkDB;
+import kr.ds.handler.CodeProductHandler;
 import kr.ds.handler.ListHandler;
 import kr.ds.utils.DsKeyBoardUtils;
-import kr.ds.utils.SharedPreference;
 
 
 /**
  * Created by Administrator on 2016-08-31.
  */
-public class Tab6Fragment extends BaseFragment implements SwipeRefreshLayout.OnRefreshListener, View.OnClickListener {
+public class ProductFragment extends BaseFragment implements SwipeRefreshLayout.OnRefreshListener, View.OnClickListener {
 
     private ArrayList<ListHandler> mData;
     private ArrayList<ListHandler> mMainData;
@@ -73,6 +76,11 @@ public class Tab6Fragment extends BaseFragment implements SwipeRefreshLayout.OnR
     private EditText mEditTextMessage;
     private ImageView mImageViewBtn;
 
+    private Spinner mSpinner;
+    private ArrayList<CodeProductHandler> mCodeData;
+    private CodeProductAdapter mCodeProductAdapter;
+    private String mCodePram = "";
+
     @Override
     public void onAttach(Activity activity) {
         // TODO Auto-generated method stub
@@ -84,8 +92,8 @@ public class Tab6Fragment extends BaseFragment implements SwipeRefreshLayout.OnR
                              Bundle savedInstanceState) {
 
 
-        mView = inflater.inflate(R.layout.fragment_list1, null);
-
+        mView = inflater.inflate(R.layout.fragment_product, null);
+        mSpinner = (Spinner)mView.findViewById(R.id.spinner1);
         mEditTextMessage = (EditText)mView.findViewById(R.id.editText_message);
 
         mEditTextMessage.setImeOptions(EditorInfo.IME_ACTION_NEXT);
@@ -97,7 +105,7 @@ public class Tab6Fragment extends BaseFragment implements SwipeRefreshLayout.OnR
                 if(actionId == EditorInfo.IME_ACTION_NEXT)
                 {
                     try {
-                        mParam = setCodeParam()+"&search="+ URLEncoder.encode(mEditTextMessage.getText().toString(),"utf-8");
+                        mParam = setCodeParam(mCodePram)+"&search="+ URLEncoder.encode(mEditTextMessage.getText().toString(),"utf-8");
                         mProgressBar.setVisibility(View.VISIBLE);
                         setList();
                         DsKeyBoardUtils.getInstance().hideKeyboard(getActivity());
@@ -146,8 +154,50 @@ public class Tab6Fragment extends BaseFragment implements SwipeRefreshLayout.OnR
         return mView;
     }
 
-    private String setCodeParam(){
-        String param = "";
+
+    public void setSpinner(){
+        new CodeProductData(mContext).clear().setCallBack(new BaseResultListener() {
+            @Override
+            public <T> void OnComplete() {
+
+            }
+
+            @Override
+            public <T> void OnComplete(Object data) {
+                if(data != null){
+                    mCodeData = (ArrayList<CodeProductHandler>) data;
+                    mCodeProductAdapter = new CodeProductAdapter(mContext, mCodeData);
+                    mSpinner.setAdapter(mCodeProductAdapter);
+                    mSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                        @Override
+                        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                            try {
+                                mCodePram = mCodeData.get(position).getCode();
+                                mParam = setCodeParam(mCodePram)+"&search="+ URLEncoder.encode(mEditTextMessage.getText().toString(),"utf-8");
+                                mProgressBar.setVisibility(View.VISIBLE);
+                                setList();
+                            } catch (UnsupportedEncodingException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                        @Override
+                        public void onNothingSelected(AdapterView<?> parent) {
+
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void OnMessage(String str) {
+
+            }
+        }).setUrl(Config.URL+Config.URL_CODE_PRODUCT).setParam("").getView();
+
+    }
+
+    private String setCodeParam(String code){
+        String param = "?code="+code;
         return param;
     }
 
@@ -155,8 +205,9 @@ public class Tab6Fragment extends BaseFragment implements SwipeRefreshLayout.OnR
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         // TODO Auto-generated method stub
         super.onActivityCreated(savedInstanceState);
-        mParam = setCodeParam();
+        mParam = setCodeParam(mCodePram);
         mProgressBar.setVisibility(View.VISIBLE);
+        setSpinner();
         setList();
         mListView.setOnScrollListener(new AbsListView.OnScrollListener() {
 
@@ -227,12 +278,12 @@ public class Tab6Fragment extends BaseFragment implements SwipeRefreshLayout.OnR
             public void OnMessage(String str) {
 
             }
-        }).setUrl(Config.URL+ Config.TAB6).setParam(mParam).getView();
+        }).setUrl(Config.URL+ Config.URL_PRODUCT).setParam(mParam).getView();
     }
 
     public void setListRefresh(){
         try {
-            mParam = setCodeParam()+"&search="+ URLEncoder.encode(mEditTextMessage.getText().toString(),"utf-8");
+            mParam = setCodeParam(mCodePram)+"&search="+ URLEncoder.encode(mEditTextMessage.getText().toString(),"utf-8");
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
@@ -276,7 +327,7 @@ public class Tab6Fragment extends BaseFragment implements SwipeRefreshLayout.OnR
             public void OnMessage(String str) {
 
             }
-        }).setUrl(Config.URL+ Config.TAB6).setParam(mParam).getView();
+        }).setUrl(Config.URL+ Config.URL_PRODUCT).setParam(mParam).getView();
     }
 
     public void setListOnLoad(){
@@ -322,7 +373,7 @@ public class Tab6Fragment extends BaseFragment implements SwipeRefreshLayout.OnR
         switch (v.getId()){
             case R.id.imageView_btn:
                 try {
-                    mParam = setCodeParam()+"&search="+ URLEncoder.encode(mEditTextMessage.getText().toString(),"utf-8");
+                    mParam = setCodeParam(mCodePram)+"&search="+ URLEncoder.encode(mEditTextMessage.getText().toString(),"utf-8");
                     mProgressBar.setVisibility(View.VISIBLE);
                     setList();
                     DsKeyBoardUtils.getInstance().hideKeyboard(getActivity());

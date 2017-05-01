@@ -1,36 +1,25 @@
 package com.kr.zenithcompany;
 
 import android.content.Intent;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
-import com.nhaarman.listviewanimations.appearance.simple.AlphaInAnimationAdapter;
 
-import java.util.ArrayList;
-
-import kr.ds.adapter.ListAdapter;
 import kr.ds.config.Config;
 import kr.ds.data.BaseResultListener;
-import kr.ds.data.ListData;
 import kr.ds.data.PopupData;
 import kr.ds.fragment.BaseFragment;
 import kr.ds.fragment.BookMarkFragment;
 import kr.ds.fragment.List1Fragment;
-import kr.ds.fragment.Tab5Fragment;
-import kr.ds.fragment.Tab6Fragment;
+import kr.ds.fragment.ProductFragment;
+import kr.ds.fragment.ReporterFragment;
 import kr.ds.fragment.TopListFragment;
-import kr.ds.fragment.WebFragment;
-import kr.ds.handler.ListHandler;
 import kr.ds.handler.PopupHandler;
 import kr.ds.popup.PopupDialog;
 import kr.ds.utils.DsObjectUtils;
@@ -128,10 +117,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener{
             mFragment = BaseFragment.newInstance(TopListFragment.class);
         }else if(tab == TAB3){
             mImageViewTab3.setImageResource(R.drawable.tab3_on);
-            mFragment = BaseFragment.newInstance(Tab5Fragment.class);
+            mFragment = BaseFragment.newInstance(ProductFragment.class);
         }else if(tab == TAB4){
             mImageViewTab4.setImageResource(R.drawable.tab4_on);
-            mFragment = BaseFragment.newInstance(Tab6Fragment.class);
+            mFragment = BaseFragment.newInstance(ReporterFragment.class);
         }else if(tab == TAB5){
             mImageViewTab5.setImageResource(R.drawable.tab5_on);
             mFragment = BaseFragment.newInstance(BookMarkFragment.class);
